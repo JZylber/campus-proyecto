@@ -1,5 +1,21 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig } from "astro/config";
 
+import alpinejs from "@astrojs/alpinejs";
+import tailwindcss from "@tailwindcss/vite";
 // https://astro.build/config
-export default defineConfig({});
+export default defineConfig({
+  integrations: [alpinejs({ entrypoint: "/src/entrypoint" })],
+  output: "static",
+  site: "https://jzylber.github.io",
+
+  build: {
+    assets: "astro",
+  },
+
+  base: "/campus-proyecto/",
+
+  vite: {
+    plugins: [tailwindcss()],
+  },
+});
