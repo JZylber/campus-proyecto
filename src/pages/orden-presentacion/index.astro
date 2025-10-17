@@ -6,7 +6,7 @@ import Layout from "../../layouts/Layout.astro";
   <h1>Orden de Presentación</h1>
   <table
     x-data="{presentations: []}"
-    x-effect="if($store.studentData.getRotation()){await $store.presentationData.getPresentationOrder($store.studentData.getRotation());presentations = $store.presentationData.getPendingPresentations();console.log(presentations);}"
+    x-effect="if($store.studentData.getRotation()){await $store.presentationData.getPresentationOrder($store.studentData.getRotation());presentations = $store.presentationData.getPendingPresentations();}"
   >
     <thead>
       <tr>
