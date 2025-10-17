@@ -1,0 +1,107 @@
+<script type="module" id="campus-insertion">
+  const page = "Materia de Prueba"; //Completar con la página a cargar
+  let campusLink = encodeURI(
+    `https://jzylber.github.io/campus-proyecto/${page}`
+  );
+  const baseURL = "https://jzylber.github.io/";
+  const fetchTagContent = (url) => {
+    return fetch(url).then((response) => {
+      return response.text();
+    });
+  };
+  // Create a div tag with the id "leftoverinformation", display none and append all breadcrumbs and menu to it
+  let leftoverDiv = document.createElement("div");
+  leftoverDiv.style.display = "none";
+  leftoverDiv.id = "leftoverinformation";
+  let breadcrumbs = document.querySelectorAll("a.breadcrumb").forEach((el) => {
+    leftoverDiv.innerHTML += el.outerHTML;
+  });
+  // Get the div with classes col and s1 and add to the template
+  let menu = document.querySelector(".col.s1 ul");
+  if (menu) {
+    leftoverDiv.innerHTML += menu.outerHTML;
+  }
+  body.appendChild(leftoverDiv);
+  let campusHTML = await fetch(campusLink).then((response) => {
+    return response.text();
+  });
+  // Clear parent and add shadow DOM
+  let parent = document
+    .getElementById("campus-insertion")
+    .closest(".bodySitio");
+  parent.id = "campus-insertion";
+  //Remove class container
+  parent.classList.remove("container");
+  // Add classes max-width: 1280px, width 100% and margin 0 auto
+  parent.style.margin = "0 auto";
+  parent.style.maxWidth = "1280px";
+  parent.style.width = "100%";
+  //Add media query so on width > 40 rem, the width is 95%
+  let mediaQuery = window.matchMedia("(min-width: 40rem)");
+  mediaQuery.addEventListener("change", (e) => {
+    if (e.matches) {
+      parent.style.width = "95%";
+    } else {
+      parent.style.width = "100%";
+    }
+  });
+  parent.innerHTML = "";
+  const shadow = parent.attachShadow({ mode: "open" });
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(campusHTML, "text/html");
+  // Append all link and style tags to head
+  const linkTags = [...doc.querySelectorAll("link, style")].map((el) => {
+    // All link tags with href that starts with /campus-proyecto should be added the base URL at the front
+    if (
+      el.href &&
+      el.href.startsWith("https://campus.ort.edu.ar/campus-proyecto")
+    ) {
+      el.href = el.href.replace("https://campus.ort.edu.ar/", baseURL);
+      const newLink = el.cloneNode();
+      newLink.href = el.href;
+      document.head.appendChild(newLink);
+    } else {
+      if (el.tagName === "LINK") {
+        // Clone element and append it to head
+        const newLink = el.cloneNode();
+        newLink.href = el.href;
+        document.head.appendChild(newLink);
+      }
+    }
+    shadow.appendChild(el);
+  });
+  const triggerDOMContentLoaded = () => {
+    document.dispatchEvent(new CustomEvent("DOMContentLoaded"));
+  };
+  // Get all script tags
+  let scripts = [...doc.querySelectorAll("script")];
+  //Remove from doc
+  scripts.forEach((el) => {
+    el.remove();
+  });
+  //Set parents innerHTML to template + doc body innerHtml
+  shadow.innerHTML += doc.body.innerHTML;
+  const loadScripts = scripts.map((el, index) => {
+    return new Promise((resolve, reject) => {
+      const newScript = document.createElement("script");
+      // Copy all atributtes from the original script tag
+      for (let i = 0; i < el.attributes.length; i++) {
+        newScript.setAttribute(el.attributes[i].name, el.attributes[i].value);
+      }
+      if (el.src) {
+        // If the source is a relative path, add the base URL at the front
+        if (el.src.startsWith("https://campus.ort.edu.ar/campus-proyecto")) {
+          newScript.src = el.src.replace("https://campus.ort.edu.ar/", baseURL);
+        }
+      }
+      newScript.innerText = el.innerText;
+      // onload resolve the promise
+      newScript.onload = () => {
+        resolve();
+      };
+      shadow.appendChild(newScript);
+    });
+  });
+  await Promise.all(loadScripts);
+  triggerDOMContentLoaded();
+</script>
