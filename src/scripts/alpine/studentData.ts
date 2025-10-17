@@ -3,8 +3,8 @@ import type { PageData } from "./pageData";
 import getStudentData from "../sheetsData/getStudentData";
 
 const defaultStudent = {
-  name: "Franco",
-  surname: "Aleksic",
+  name: "Julian Ariel",
+  surname: "Zylber",
 };
 
 const studentDataStore = (Alpine: Alpine) => ({
