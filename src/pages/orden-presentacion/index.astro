@@ -4,4 +4,21 @@ import Layout from "../../layouts/Layout.astro";
 
 <Layout>
   <h1>Orden de Presentación</h1>
+  <table
+    x-data="{presentations: []}"
+    x-effect="if($store.studentData.getRotation()){await $store.presentationData.getPresentationOrder($store.studentData.getRotation());presentations = $store.presentationData.getPendingPresentations();}"
+  >
+    <thead>
+      <tr>
+        <th>Grupo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <template x-for="presentation in presentations" :key="presentation.id">
+        <tr>
+          <td x-text="presentation.name"></td>
+        </tr>
+      </template>
+    </tbody>
+  </table>
 </Layout>

@@ -7,7 +7,7 @@ const defaultStudent = {
   surname: "Aleksic",
 };
 
-export default (Alpine: Alpine) => ({
+const studentDataStore = (Alpine: Alpine) => ({
   name: "",
   surname: "",
   course: "",
@@ -17,6 +17,14 @@ export default (Alpine: Alpine) => ({
     name: "",
   },
   role: "",
+  getRotation() {
+    if (this.course.at(-1) === "A" || this.course.at(-1) === "B") {
+      return "AB";
+    } else if (this.course.at(-1) === "C" || this.course.at(-1) === "D") {
+      return "CD";
+    }
+    return "";
+  },
   setStudentData(studentData: {
     name: string;
     surname: string;
@@ -56,3 +64,6 @@ export default (Alpine: Alpine) => ({
     }
   },
 });
+
+export default studentDataStore;
+export type StudentData = ReturnType<typeof studentDataStore>;
