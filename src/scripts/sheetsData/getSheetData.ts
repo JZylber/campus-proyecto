@@ -34,7 +34,13 @@ export default async ({
           typeof cellData["v"] == "string" &&
           cellData["v"].startsWith("Date")
         ) {
-          rowObject[propName] = new Date(cellData["f"]);
+          // Format DD/MM/YYYY
+          const [day, month, year] = cellData["f"].split("/");
+          rowObject[propName] = new Date(
+            parseInt(year),
+            parseInt(month) - 1,
+            parseInt(day)
+          );
         } else {
           rowObject[propName] = cellData["v"];
         }

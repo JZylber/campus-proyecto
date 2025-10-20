@@ -13,10 +13,7 @@ import Layout from "../../layouts/Layout.astro";
         <th>Grupo</th>
       </tr>
     </thead>
-    <tbody
-      x-show="presentations.length > 0"
-      x-effect="console.log($store.presentationData.presentationDates)"
-    >
+    <tbody x-show="presentations.length > 0">
       <template x-for="presentation in presentations" :key="presentation.id">
         <tr>
           <td x-text="presentation.name"></td>
