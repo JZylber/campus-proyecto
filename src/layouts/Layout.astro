@@ -9,7 +9,12 @@ import "../styles/global.css";
     <meta name="viewport" content="width=device-width" />
     <title>Campus Proyecto</title>
   </head>
-  <body>
-    <slot />
+  <body class="w-full">
+    <div
+      class="w-fill flex flex-col relative"
+      :class="{ 'h-[calc(100vh-64px-1rem)] bg-[#FAFBFF]': $store.pageData.onCampus }"
+    >
+      <slot />
+    </div>
   </body>
 </html>
