@@ -1,6 +1,6 @@
 import getSheetData from "./getSheetData";
 
-export default async (rotation: string, dataSheetId: string) => {
+const getPresentationOrder = async (rotation: string, dataSheetId: string) => {
   const presentationOrder = await getSheetData({
     sheetID: dataSheetId,
     sheetName: `Presentacion`,
@@ -13,3 +13,10 @@ export default async (rotation: string, dataSheetId: string) => {
     state: entry["Estado"] as string,
   }));
 };
+
+export default getPresentationOrder;
+export type PresentationEntry = ReturnType<
+  typeof getPresentationOrder
+> extends Promise<Array<infer U>>
+  ? U
+  : never;

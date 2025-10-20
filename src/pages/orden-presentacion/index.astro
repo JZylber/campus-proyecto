@@ -6,17 +6,30 @@ import Layout from "../../layouts/Layout.astro";
   <h1>Orden de Presentación</h1>
   <table
     x-data="{presentations: []}"
-    x-effect="if($store.studentData.getRotation()){await $store.presentationData.getPresentationOrder($store.studentData.getRotation());presentations = $store.presentationData.getPendingPresentations();}"
+    x-effect="if($store.studentData.getRotation()){await $store.presentationData.loadPresentationData($store.studentData.getRotation());presentations = $store.presentationData.presentationOrder;}"
   >
     <thead>
       <tr>
         <th>Grupo</th>
+        <th>Instancia</th>
+        <th>Estado</th>
+        <th>Fecha Estimada</th>
+        <th>Bloque Estimado</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody x-show="presentations.length > 0">
       <template x-for="presentation in presentations" :key="presentation.id">
         <tr>
           <td x-text="presentation.name"></td>
+          <td x-text="presentation.instance"></td>
+          <td x-text="presentation.state"></td>
+          <td
+            x-data="{ date: $store.presentationData.groupPresentationDates[presentation.id]?.date }"
+            x-text="date ? date.toLocaleDateString('es-ES', { month: 'short', weekday: 'long', day:'numeric' }) : '---'"
+          ></td>
+          <td
+            x-text="$store.presentationData.groupPresentationDates[presentation.id] ? $store.presentationData.groupPresentationDates[presentation.id].block : '---'"
+          ></td>
         </tr>
       </template>
     </tbody>
