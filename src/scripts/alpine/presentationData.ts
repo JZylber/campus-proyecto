@@ -109,12 +109,6 @@ const presentationDataStore = (Alpine: Alpine) => ({
       this.getPresentationDates(rotation),
     ]);
     this.calculatePresentationBlocks();
-    console.log(this.groupPresentationDates);
-  },
-  getPendingPresentations() {
-    return this.presentationOrder.filter(
-      (presentation) => presentation.state === "Pendiente"
-    );
   },
 });
 
