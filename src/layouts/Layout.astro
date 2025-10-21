@@ -11,8 +11,9 @@ import "../styles/global.css";
   </head>
   <body class="w-full">
     <div
+      x-init="console.log('Alpine Layout initialized')"
       class="w-fill flex flex-col relative"
-      :class="{ 'h-[calc(100vh-64px-1rem)] bg-[#FAFBFF]': $store.pageData.onCampus }"
+      :class="{ 'h-[calc(100vh-64px-1rem)] bg-[#FAFBFF]': $store.pageData.onCampus, 'h-full': !$store.pageData.onCampus }"
     >
       <slot />
     </div>
