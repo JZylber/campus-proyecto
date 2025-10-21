@@ -111,6 +111,10 @@ const presentationDataStore = (Alpine: Alpine) => ({
     ]);
     this.calculatePresentationBlocks();
   },
+  getGroupPresentationState(groupId: number) {
+    const presentation = this.presentationOrder.find((p) => p.id === groupId);
+    return presentation ? presentation.state : undefined;
+  },
 });
 
 export default presentationDataStore;

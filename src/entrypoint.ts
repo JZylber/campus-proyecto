@@ -6,7 +6,6 @@ import presentationData from "./scripts/alpine/presentationData";
 export default (Alpine: Alpine) => {
   Alpine.store("pageData", pageData());
   Alpine.store("studentData", studentData(Alpine));
-  Alpine.store("presentationData", presentationData(Alpine));
   const shadowContainer = document.querySelector("#campus-insertion");
   if (
     shadowContainer !== null &&

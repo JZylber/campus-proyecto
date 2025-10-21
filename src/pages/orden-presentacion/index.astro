@@ -3,7 +3,13 @@ import Loader from "../../components/misc/loader/Loader.astro";
 import Layout from "../../layouts/Layout.astro";
 ---
 
-<Layout>
+<script>
+  import presentationDataStore from "../../scripts/alpine/presentationData";
+  document.addEventListener("alpine:init", () => {
+    Alpine.store("presentationData", presentationDataStore(Alpine));
+  });
+</script>
+<Layout x>
   <h1>Orden de Presentación</h1>
   <div x-show="$store.studentData.loading === true" class="grow">
     <Loader />
@@ -26,6 +32,22 @@ import Layout from "../../layouts/Layout.astro";
       </div>
     </div>
   </template>
+  <template
+    x-if="$store.studentData.loading === false && $store.studentData.group.id !== 0"
+  >
+    <div
+      x-data="{id: $store.studentData.group.id, state: undefined, date: undefined, block: undefined}"
+      x-effect="state = $store.presentationData.getGroupPresentationState(id); date = $store.presentationData.groupPresentationDates[id]?.date; block = $store.presentationData.groupPresentationDates[id]?.block"
+    >
+      <span x-text="$store.studentData.group.name"></span>
+      <span x-show="state !== undefined" x-text="state"></span>
+      <span
+        x-show="date !== undefined"
+        x-text="date ? date.toLocaleDateString('es-ES', { month: 'short', weekday: 'long', day:'numeric' }) : ''"
+      ></span>
+      <span x-show="block !== undefined" x-text="block"></span>
+    </div></template
+  >
   <template
     x-if="$store.studentData.loading === false && $store.studentData.rotation !== ''"
   >
