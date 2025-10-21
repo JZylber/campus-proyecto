@@ -13,6 +13,7 @@ const blockStartTimes = {
   4: "13:10",
   5: "14:30",
   6: "16:00",
+  7: "17:30",
 };
 
 const time2Block = (time: Date) => {
@@ -27,7 +28,7 @@ const time2Block = (time: Date) => {
       return Number(block) - 1;
     }
   }
-  return Object.keys(blockStartTimes).length - 1;
+  return Object.keys(blockStartTimes).length;
 };
 
 const isSameDate = (date1: Date, date2: Date) => {
