@@ -21,24 +21,6 @@ import Layout from "../../layouts/Layout.astro";
     <div x-show="$store.studentData.loading === true" class="grow">
       <Loader />
     </div>
-    <template
-      x-if="$store.studentData.loading === false && $store.studentData.rotation === ''"
-    >
-      <div class="grow flex items-center justify-center gap-20 text-2xl">
-        <div
-          class="border p-4 cursor-pointer"
-          @click="$store.studentData.rotation = 'AB'"
-        >
-          AB
-        </div>
-        <div
-          class="border p-4 cursor-pointer"
-          @click="$store.studentData.rotation = 'CD'"
-        >
-          CD
-        </div>
-      </div>
-    </template>
     <Group />
     <Table />
   </main>

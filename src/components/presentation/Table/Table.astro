@@ -2,30 +2,31 @@
 import TableRow from "./TableRow.astro";
 ---
 
-<template
-  x-if="$store.studentData.loading === false && $store.studentData.rotation !== ''"
->
+<template x-if="$store.studentData.loading === false">
   <div
-    class="font-poppins flex px-12 py-8 items-center justify-between rounded-4xl bg-white"
+    class="font-poppins flex flex-col px-12 py-8 rounded-4xl bg-white gap-y-5"
     x-data="{presentations: []}"
-    x-effect="await $store.presentationData.loadPresentationData($store.studentData.rotation);presentations = $store.presentationData.presentationOrder;"
+    x-effect="presentations = $store.presentationData.presentationOrder"
   >
-    <h2>Listado de orden de presentación</h2>
-    <h3>Ciclo lectivo <span x-text="(new Date()).getYear()"></span></h3>
+    <div class="flex flex-col gap-y-2">
+      <h2 class="font-semibold text-lg">Listado de orden de presentación</h2>
+      <h3 class="text-light-sea-green text-sm">
+        Ciclo lectivo <span x-text="(new Date()).getFullYear();"></span>
+      </h3>
+    </div>
     <div class="grid grid-cols-5">
       <TableRow>
-        <span>Nombre del grupo</span>
-        <span>Fecha estimada</span>
-        <span>Bloque estimado</span>
-        <span>Rotación</span>
-        <span>Estado del grupo</span>
+        <span class="text-gray">Nombre del grupo</span>
+        <span class="text-gray">Fecha estimada</span>
+        <span class="text-gray">Bloque estimado</span>
+        <span class="text-gray">Rotación</span>
+        <span class="text-gray">Estado del grupo</span>
       </TableRow>
       <template x-for="presentation in presentations" :key="presentation.id">
         <TableRow>
           <span x-text="presentation.name"></span>
           <span
-            x-data="{ date: $store.presentationData.groupPresentationDates[presentation.id]?.date }"
-            x-text="date ? $store.presentationData.showDate(date) : '---'"
+            x-text="$store.presentationData.groupPresentationDates[presentation.id]?.date ? $store.presentationData.showDate($store.presentationData.groupPresentationDates[presentation.id].date) : '---'"
           ></span>
           <span
             x-text="$store.presentationData.groupPresentationDates[presentation.id] ? $store.presentationData.groupPresentationDates[presentation.id].block + '\xB0 bloque' : '---'"

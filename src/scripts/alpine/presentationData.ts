@@ -113,7 +113,7 @@ const presentationDataStore = (Alpine: Alpine) => ({
       }
     }
   },
-  async init(rotation: string) {
+  async init() {
     await Promise.all([
       this.getPresentationOrder(),
       this.getPresentationDates(),
