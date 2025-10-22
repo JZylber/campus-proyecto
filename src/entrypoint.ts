@@ -7,16 +7,4 @@ export default (Alpine: Alpine) => {
   Alpine.store("pageData", pageData());
   Alpine.store("studentData", studentData(Alpine));
   Alpine.store("presentationData", presentationDataStore(Alpine));
-  const shadowContainer = document.querySelector("#campus-insertion");
-  if (
-    shadowContainer !== null &&
-    (Alpine.store("pageData") as PageData).onCampus
-  ) {
-    const shadow = shadowContainer.shadowRoot?.getRootNode() as
-      | ElementWithXAttributes
-      | undefined;
-    if (shadow !== undefined) {
-      Alpine.initTree(shadow);
-    }
-  }
 };
