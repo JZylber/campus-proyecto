@@ -2,7 +2,7 @@ import type { Alpine } from "alpinejs";
 import type { PageData } from "./pageData";
 import getStudentData from "../sheetsData/getStudentData";
 
-const DEBUG = false;
+const DEBUG = true;
 const testName = "Franco";
 const testSurname = "Aleksic";
 

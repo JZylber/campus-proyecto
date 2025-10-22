@@ -2,11 +2,44 @@
 import TableRow from "./TableRow.astro";
 ---
 
-<template x-if="$store.studentData.loading === false">
+<script>
+  import type { PresentationData } from "../../../scripts/alpine/presentationData";
+  document.addEventListener("alpine:init", () => {
+    Alpine.data("presentations", () => {
+      return {
+        presentations: [] as PresentationData["presentationOrder"],
+        filter: {
+          rotation: "",
+          keyword: "",
+        },
+        init() {
+          this.presentations = (
+            Alpine.store("presentationData") as PresentationData
+          ).presentationOrder;
+        },
+        get filteredPresentations() {
+          let result = this.presentations;
+
+          if (this.filter.rotation !== "") {
+            result = result.filter((p) => p.rotation === this.filter.rotation);
+          }
+
+          if (this.filter.keyword !== "") {
+            result = result.filter((p) =>
+              p.name.toLowerCase().includes(this.filter.keyword.toLowerCase())
+            );
+          }
+          return result;
+        },
+      };
+    });
+  });
+</script>
+<template x-if="$store.presentationData.presentationOrder.length > 0">
   <div
     class="font-poppins flex flex-col px-12 py-8 rounded-4xl bg-white gap-y-5"
-    x-data="{presentations: []}"
-    x-effect="presentations = $store.presentationData.presentationOrder"
+    x-data="presentations()"
+    x-init="filter.rotation = $store.studentData.rotation"
   >
     <div class="flex flex-col gap-y-2">
       <h2 class="font-semibold text-lg">Listado de orden de presentación</h2>
@@ -22,7 +55,10 @@ import TableRow from "./TableRow.astro";
         <span class="text-gray">Rotación</span>
         <span class="text-gray">Estado del grupo</span>
       </TableRow>
-      <template x-for="presentation in presentations" :key="presentation.id">
+      <template
+        x-for="presentation in filteredPresentations"
+        :key="presentation.id"
+      >
         <TableRow>
           <span x-text="presentation.name"></span>
           <span
