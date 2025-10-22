@@ -2,39 +2,6 @@
 import TableRow from "./TableRow.astro";
 ---
 
-<script>
-  import type { PresentationData } from "../../../scripts/alpine/presentationData";
-  document.addEventListener("alpine:init", () => {
-    Alpine.data("presentations", () => {
-      return {
-        presentations: [] as PresentationData["presentationOrder"],
-        filter: {
-          rotation: "",
-          keyword: "",
-        },
-        init() {
-          this.presentations = (
-            Alpine.store("presentationData") as PresentationData
-          ).presentationOrder;
-        },
-        get filteredPresentations() {
-          let result = this.presentations;
-
-          if (this.filter.rotation !== "") {
-            result = result.filter((p) => p.rotation === this.filter.rotation);
-          }
-
-          if (this.filter.keyword !== "") {
-            result = result.filter((p) =>
-              p.name.toLowerCase().includes(this.filter.keyword.toLowerCase())
-            );
-          }
-          return result;
-        },
-      };
-    });
-  });
-</script>
 <template
   x-if="$store.presentationData && $store.presentationData.presentationOrder.length > 0"
 >
