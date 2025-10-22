@@ -50,9 +50,10 @@ import TableRow from "./TableRow.astro";
         Ciclo lectivo <span x-text="(new Date()).getFullYear();"></span>
       </h3>
     </div>
-    <div class="grid grid-cols-5">
+    <div class="grid grid-cols-6">
       <TableRow>
         <span class="text-gray">Nombre del grupo</span>
+        <span class="text-gray">Instancia</span>
         <span class="text-gray">Fecha estimada</span>
         <span class="text-gray">Bloque estimado</span>
         <span class="text-gray">Rotación</span>
@@ -64,6 +65,7 @@ import TableRow from "./TableRow.astro";
       >
         <TableRow>
           <span x-text="presentation.name"></span>
+          <span x-text="presentation.instance"></span>
           <span
             x-text="$store.presentationData.groupPresentationDates[presentation.id]?.date ? $store.presentationData.showDate($store.presentationData.groupPresentationDates[presentation.id].date) : '---'"
           ></span>
