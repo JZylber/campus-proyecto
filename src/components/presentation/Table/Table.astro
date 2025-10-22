@@ -35,7 +35,9 @@ import TableRow from "./TableRow.astro";
     });
   });
 </script>
-<template x-if="$store.presentationData.presentationOrder.length > 0">
+<template
+  x-if="$store.presentationData && $store.presentationData.presentationOrder.length > 0"
+>
   <div
     class="font-poppins flex flex-col px-12 py-8 rounded-4xl bg-white gap-y-5"
     x-data="presentations()"

@@ -1,7 +1,6 @@
 import type { Alpine, ElementWithXAttributes } from "alpinejs";
 import pageData, { type PageData } from "./scripts/alpine/pageData";
 import studentData from "./scripts/alpine/studentData";
-import presentationData from "./scripts/alpine/presentationData";
 
 export default (Alpine: Alpine) => {
   Alpine.store("pageData", pageData());

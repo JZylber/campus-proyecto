@@ -3,7 +3,7 @@ import GroupCategory from "./GroupCategory.astro";
 ---
 
 <template
-  x-if="$store.studentData.loading === false && $store.studentData.group.id !== 0"
+  x-if="$store.presentationData && $store.studentData.loading === false && $store.studentData.group.id !== 0"
 >
   <div
     class="flex px-12 py-10 items-center justify-between rounded-4xl bg-white"
