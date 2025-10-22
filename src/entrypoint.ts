@@ -14,6 +14,8 @@ export default (Alpine: Alpine) => {
       | ElementWithXAttributes
       | undefined;
     if (shadow !== undefined) {
+      // Dispatch alpine init event on shadow DOM
+      document.dispatchEvent(new CustomEvent("alpine:initialized"));
       Alpine.initTree(shadow);
     }
   }

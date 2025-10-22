@@ -4,7 +4,7 @@ import TableRow from "./TableRow.astro";
 
 <script>
   import type { PresentationData } from "../../../scripts/alpine/presentationData";
-  document.addEventListener("alpine:init", () => {
+  document.addEventListener("alpine:initialized", () => {
     Alpine.data("presentations", () => {
       return {
         presentations: [] as PresentationData["presentationOrder"],
