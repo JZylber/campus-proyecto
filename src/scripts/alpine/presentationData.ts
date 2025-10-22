@@ -58,56 +58,65 @@ const presentationDataStore = (Alpine: Alpine) => ({
   setGroupPresentationDate(groupId: number, date: PresentationDateEntry) {
     this.groupPresentationDates[groupId] = date;
   },
-  async getPresentationOrder(rotation: string) {
+  async getPresentationOrder() {
     const { dataSheetId, onCampus } = Alpine.store("pageData") as PageData;
-    const presentationOrder = await getPresentationOrder(rotation, dataSheetId);
+    const presentationOrder = await getPresentationOrder(dataSheetId);
     this.setPresentationOrder(presentationOrder);
   },
-  async getPresentationDates(rotation: string) {
+  async getPresentationDates() {
     const { dataSheetId, onCampus } = Alpine.store("pageData") as PageData;
-    const presentationDates = await getPresentationDates(rotation, dataSheetId);
+    const presentationDates = await getPresentationDates(dataSheetId);
     this.setPresentationDates(presentationDates);
   },
   calculatePresentationBlocks() {
     const blocks = [];
     const now = new Date();
     const currentBlock = time2Block(now);
-    // Get dates that are today or later and
-    const relevantDates = this.presentationDates.filter(
-      (dateEntry) =>
-        isAfter(dateEntry.date, now) ||
-        (isSameDate(dateEntry.date, now) && dateEntry.block >= currentBlock)
+    // Get all unique possible rotations as a set
+    const possibleRotations = new Set(
+      this.presentationDates.map((dateEntry) => dateEntry.rotation)
     );
-    // Get groups that are pending or in progress
-    const relevantGroups = this.presentationOrder.filter(
-      (presentation) =>
-        presentation.state === "Pendiente" ||
-        presentation.state === "Presentando"
-    );
-    let groupIndex = 0;
-    for (const dateEntry of relevantDates) {
-      const block = {
-        dateEntry,
-        groups: relevantGroups
-          .slice(groupIndex, groupIndex + dateEntry.numberOfPresentations)
-          .map((group) => group.id),
-      };
-      blocks.push(block);
-      groupIndex += dateEntry.numberOfPresentations;
-      if (groupIndex >= relevantGroups.length) {
-        break;
+    // For each rotation, calculate the presentation blocks
+    for (const rotation of possibleRotations) {
+      const relevantDates = this.presentationDates.filter(
+        (dateEntry) =>
+          (isAfter(dateEntry.date, now) ||
+            (isSameDate(dateEntry.date, now) &&
+              dateEntry.block >= currentBlock)) &&
+          dateEntry.rotation === rotation
+      );
+      // Get groups that are pending or in progress
+      const relevantGroups = this.presentationOrder.filter(
+        (presentation) =>
+          (presentation.state === "Pendiente" ||
+            presentation.state === "Presentando") &&
+          presentation.rotation === rotation
+      );
+      let groupIndex = 0;
+      for (const dateEntry of relevantDates) {
+        const block = {
+          dateEntry,
+          groups: relevantGroups
+            .slice(groupIndex, groupIndex + dateEntry.numberOfPresentations)
+            .map((group) => group.id),
+        };
+        blocks.push(block);
+        groupIndex += dateEntry.numberOfPresentations;
+        if (groupIndex >= relevantGroups.length) {
+          break;
+        }
       }
-    }
-    for (const block of blocks) {
-      for (const groupId of block.groups) {
-        this.setGroupPresentationDate(groupId, block.dateEntry);
+      for (const block of blocks) {
+        for (const groupId of block.groups) {
+          this.setGroupPresentationDate(groupId, block.dateEntry);
+        }
       }
     }
   },
-  async loadPresentationData(rotation: string) {
+  async init(rotation: string) {
     await Promise.all([
-      this.getPresentationOrder(rotation),
-      this.getPresentationDates(rotation),
+      this.getPresentationOrder(),
+      this.getPresentationDates(),
     ]);
     this.calculatePresentationBlocks();
   },

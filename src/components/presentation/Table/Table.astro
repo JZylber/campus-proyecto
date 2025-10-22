@@ -1,0 +1,39 @@
+---
+import TableRow from "./TableRow.astro";
+---
+
+<template
+  x-if="$store.studentData.loading === false && $store.studentData.rotation !== ''"
+>
+  <div
+    class="font-poppins flex px-12 py-8 items-center justify-between rounded-4xl bg-white"
+    x-data="{presentations: []}"
+    x-effect="await $store.presentationData.loadPresentationData($store.studentData.rotation);presentations = $store.presentationData.presentationOrder;"
+  >
+    <h2>Listado de orden de presentación</h2>
+    <h3>Ciclo lectivo <span x-text="(new Date()).getYear()"></span></h3>
+    <div class="grid grid-cols-5">
+      <TableRow>
+        <span>Nombre del grupo</span>
+        <span>Fecha estimada</span>
+        <span>Bloque estimado</span>
+        <span>Rotación</span>
+        <span>Estado del grupo</span>
+      </TableRow>
+      <template x-for="presentation in presentations" :key="presentation.id">
+        <TableRow>
+          <span x-text="presentation.name"></span>
+          <span
+            x-data="{ date: $store.presentationData.groupPresentationDates[presentation.id]?.date }"
+            x-text="date ? $store.presentationData.showDate(date) : '---'"
+          ></span>
+          <span
+            x-text="$store.presentationData.groupPresentationDates[presentation.id] ? $store.presentationData.groupPresentationDates[presentation.id].block + '\xB0 bloque' : '---'"
+          ></span>
+          <span x-text="presentation.rotation"></span>
+          <span x-text="presentation.state"></span>
+        </TableRow>
+      </template>
+    </div>
+  </div>
+</template>

@@ -1,15 +1,16 @@
 import getSheetData from "./getSheetData";
 
-async function getPresentationDates(rotation: string, dataSheetId: string) {
+async function getPresentationDates(dataSheetId: string) {
   const presentationDates = await getSheetData({
     sheetID: dataSheetId,
     sheetName: `Fechas`,
-    query: `SELECT * WHERE C = '${rotation}'`,
+    query: `SELECT * `,
   });
   return presentationDates.map((entry) => ({
     date: entry["Fecha"] as Date,
     block: entry["Bloque"] as number,
     instance: entry["Instancia"] as number,
+    rotation: entry["Rotación"] as string,
     numberOfPresentations: entry["N Grupos"] as number,
   }));
 }

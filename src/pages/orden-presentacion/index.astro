@@ -1,6 +1,7 @@
 ---
 import Loader from "../../components/misc/loader/Loader.astro";
-import Group from "../../components/presentation/Group.astro";
+import Group from "../../components/presentation/GroupBanner/Group.astro";
+import Table from "../../components/presentation/Table/Table.astro";
 import Layout from "../../layouts/Layout.astro";
 ---
 
@@ -39,42 +40,6 @@ import Layout from "../../layouts/Layout.astro";
       </div>
     </template>
     <Group />
-    <template
-      x-if="$store.studentData.loading === false && $store.studentData.rotation !== ''"
-    >
-      <table
-        x-data="{presentations: []}"
-        x-effect="await $store.presentationData.loadPresentationData($store.studentData.rotation);presentations = $store.presentationData.presentationOrder;"
-      >
-        <thead>
-          <tr>
-            <th>Grupo</th>
-            <th>Instancia</th>
-            <th>Estado</th>
-            <th>Fecha Estimada</th>
-            <th>Bloque Estimado</th>
-          </tr>
-        </thead>
-        <tbody x-show="presentations.length > 0">
-          <template
-            x-for="presentation in presentations"
-            :key="presentation.id"
-          >
-            <tr>
-              <td x-text="presentation.name"></td>
-              <td x-text="presentation.instance"></td>
-              <td x-text="presentation.state"></td>
-              <td
-                x-data="{ date: $store.presentationData.groupPresentationDates[presentation.id]?.date }"
-                x-text="date ? date.toLocaleDateString('es-ES', { month: 'short', weekday: 'long', day:'numeric' }) : '---'"
-              ></td>
-              <td
-                x-text="$store.presentationData.groupPresentationDates[presentation.id] ? $store.presentationData.groupPresentationDates[presentation.id].block : '---'"
-              ></td>
-            </tr>
-          </template>
-        </tbody>
-      </table>
-    </template>
+    <Table />
   </main>
 </Layout>
