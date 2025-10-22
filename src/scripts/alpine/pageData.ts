@@ -6,6 +6,12 @@ const isOnCampus = () => {
 const pageDataStore = () => ({
   onCampus: isOnCampus(),
   dataSheetId: "15G9sQ8vv0C38mQXtgcfKqPiahh5eK-qRCaHHbcccffA",
+  dataURL: "/campus-proyecto",
+  publicURL(url: string) {
+    return `${this.onCampus ? "https://jzylber.github.io" : ""}${
+      this.dataURL
+    }/${url}`;
+  },
 });
 
 export type PageData = ReturnType<typeof pageDataStore>;

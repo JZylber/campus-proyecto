@@ -2,6 +2,10 @@ import type { Alpine } from "alpinejs";
 import type { PageData } from "./pageData";
 import getStudentData from "../sheetsData/getStudentData";
 
+const DEBUG = true;
+const testName = "Franco";
+const testSurname = "Aleksic";
+
 const studentDataStore = (Alpine: Alpine) => ({
   name: "",
   surname: "",
@@ -39,8 +43,8 @@ const studentDataStore = (Alpine: Alpine) => ({
   },
   async init() {
     const { dataSheetId, onCampus } = Alpine.store("pageData") as PageData;
-    let name = "";
-    let surname = "";
+    let name = DEBUG ? testName : "";
+    let surname = DEBUG ? testSurname : "";
     if (onCampus) {
       const data = await fetch(
         "https://campus.ort.edu.ar/ajaxactions/GetLoggedInData",

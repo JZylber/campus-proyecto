@@ -1,0 +1,76 @@
+---
+import TableRow from "./TableRow.astro";
+---
+
+<script>
+  import type { PresentationData } from "../../../scripts/alpine/presentationData";
+  document.addEventListener("alpine:init", () => {
+    Alpine.data("presentations", () => {
+      return {
+        presentations: [] as PresentationData["presentationOrder"],
+        filter: {
+          rotation: "",
+          keyword: "",
+        },
+        init() {
+          this.presentations = (
+            Alpine.store("presentationData") as PresentationData
+          ).presentationOrder;
+        },
+        get filteredPresentations() {
+          let result = this.presentations;
+
+          if (this.filter.rotation !== "") {
+            result = result.filter((p) => p.rotation === this.filter.rotation);
+          }
+
+          if (this.filter.keyword !== "") {
+            result = result.filter((p) =>
+              p.name.toLowerCase().includes(this.filter.keyword.toLowerCase())
+            );
+          }
+          return result;
+        },
+      };
+    });
+  });
+</script>
+<template x-if="$store.presentationData.presentationOrder.length > 0">
+  <div
+    class="font-poppins flex flex-col px-12 py-8 rounded-4xl bg-white gap-y-5"
+    x-data="presentations()"
+    x-init="filter.rotation = $store.studentData.rotation"
+  >
+    <div class="flex flex-col gap-y-2">
+      <h2 class="font-semibold text-lg">Listado de orden de presentación</h2>
+      <h3 class="text-light-sea-green text-sm">
+        Ciclo lectivo <span x-text="(new Date()).getFullYear();"></span>
+      </h3>
+    </div>
+    <div class="grid grid-cols-5">
+      <TableRow>
+        <span class="text-gray">Nombre del grupo</span>
+        <span class="text-gray">Fecha estimada</span>
+        <span class="text-gray">Bloque estimado</span>
+        <span class="text-gray">Rotación</span>
+        <span class="text-gray">Estado del grupo</span>
+      </TableRow>
+      <template
+        x-for="presentation in filteredPresentations"
+        :key="presentation.id"
+      >
+        <TableRow>
+          <span x-text="presentation.name"></span>
+          <span
+            x-text="$store.presentationData.groupPresentationDates[presentation.id]?.date ? $store.presentationData.showDate($store.presentationData.groupPresentationDates[presentation.id].date) : '---'"
+          ></span>
+          <span
+            x-text="$store.presentationData.groupPresentationDates[presentation.id] ? $store.presentationData.groupPresentationDates[presentation.id].block + '\xB0 bloque' : '---'"
+          ></span>
+          <span x-text="presentation.rotation"></span>
+          <span x-text="presentation.state"></span>
+        </TableRow>
+      </template>
+    </div>
+  </div>
+</template>
