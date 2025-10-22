@@ -1,10 +1,12 @@
 import type { Alpine, ElementWithXAttributes } from "alpinejs";
 import pageData, { type PageData } from "./scripts/alpine/pageData";
 import studentData from "./scripts/alpine/studentData";
+import presentationDataStore from "./scripts/alpine/presentationData";
 
 export default (Alpine: Alpine) => {
   Alpine.store("pageData", pageData());
   Alpine.store("studentData", studentData(Alpine));
+  Alpine.store("presentationData", presentationDataStore(Alpine));
   const shadowContainer = document.querySelector("#campus-insertion");
   if (
     shadowContainer !== null &&
@@ -14,8 +16,6 @@ export default (Alpine: Alpine) => {
       | ElementWithXAttributes
       | undefined;
     if (shadow !== undefined) {
-      // Dispatch alpine init event on shadow DOM
-      document.dispatchEvent(new CustomEvent("alpine:initialized"));
       Alpine.initTree(shadow);
     }
   }

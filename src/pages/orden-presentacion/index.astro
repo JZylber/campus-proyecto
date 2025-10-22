@@ -5,12 +5,6 @@ import Table from "../../components/presentation/Table/Table.astro";
 import Layout from "../../layouts/Layout.astro";
 ---
 
-<script>
-  import presentationDataStore from "../../scripts/alpine/presentationData";
-  document.addEventListener("alpine:initialized", () => {
-    Alpine.store("presentationData", presentationDataStore(Alpine));
-  });
-</script>
 <Layout>
   <main class="p-10 flex flex-col gap-y-6 min-h-full">
     <h1 class="font-poppins text-2xl">
