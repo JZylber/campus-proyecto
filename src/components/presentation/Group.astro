@@ -18,12 +18,12 @@ import GroupCategory from "./GroupCategory.astro";
     <GroupCategory
       img="/icons/calendar.svg"
       category="Fecha estimada de presentación"
-      value="date ? date.toLocaleDateString('es-ES', { month: 'short', weekday: 'long', day:'numeric' }) : '---'"
+      value="date ? $store.presentationData.showDate(date) : '---'"
     />
     <GroupCategory
       img="/icons/hashtag.svg"
       category="Bloque estimado de presentación"
-      value="block !== undefined ? block : '---'"
+      value="block !== undefined ? block + '\xB0 bloque' : '---'"
     />
   </div></template
 >

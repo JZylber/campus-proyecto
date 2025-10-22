@@ -115,6 +115,17 @@ const presentationDataStore = (Alpine: Alpine) => ({
     const presentation = this.presentationOrder.find((p) => p.id === groupId);
     return presentation ? presentation.state : undefined;
   },
+  showDate(date: Date) {
+    // Format date as Weekday (long) DD/MM
+    // Weekday in Spanish
+    const weekday = date.toLocaleDateString("es-AR", { weekday: "long" });
+    // Capitalize first letter
+    const capitalizedWeekday =
+      weekday.charAt(0).toUpperCase() + weekday.slice(1);
+    const day = date.getDate().toString();
+    const month = (date.getMonth() + 1).toString();
+    return `${capitalizedWeekday} ${day}/${month}`;
+  },
 });
 
 export default presentationDataStore;
