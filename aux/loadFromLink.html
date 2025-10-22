@@ -30,21 +30,12 @@
     .getElementById("campus-insertion")
     .closest(".bodySitio");
   parent.id = "campus-insertion";
-  //Remove class container
+  //Remove class container and bodySitio container
   parent.classList.remove("container");
+  parent.classList.remove("bodySitio");
   // Add classes max-width: 1280px, width 100% and margin 0 auto
   parent.style.margin = "0 auto";
-  parent.style.maxWidth = "1280px";
   parent.style.width = "100%";
-  //Add media query so on width > 40 rem, the width is 95%
-  let mediaQuery = window.matchMedia("(min-width: 40rem)");
-  mediaQuery.addEventListener("change", (e) => {
-    if (e.matches) {
-      parent.style.width = "95%";
-    } else {
-      parent.style.width = "100%";
-    }
-  });
   parent.innerHTML = "";
   const shadow = parent.attachShadow({ mode: "open" });
   const parser = new DOMParser();

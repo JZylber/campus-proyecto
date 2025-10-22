@@ -18,7 +18,7 @@ import "../styles/global.css";
   <body class="w-full">
     <div
       x-init="console.log('Alpine Layout initialized')"
-      class="w-fill flex flex-col relative bg-ghost-white"
+      class="w-fill flex flex-col relative bg-ghost-white overflow-y-scroll"
       :class="{ 'h-[calc(100vh-64px-1rem)]': $store.pageData.onCampus, 'h-full': !$store.pageData.onCampus }"
     >
       <slot />
