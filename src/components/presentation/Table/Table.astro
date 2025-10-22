@@ -42,13 +42,30 @@ import TableRow from "./TableRow.astro";
   <div
     class="font-poppins flex flex-col px-12 py-8 rounded-4xl bg-white gap-y-5"
     x-data="presentations()"
-    x-init="filter.rotation = $store.studentData.rotation"
+    x-effect="filter.rotation = $store.studentData.rotation"
   >
-    <div class="flex flex-col gap-y-2">
-      <h2 class="font-semibold text-lg">Listado de orden de presentación</h2>
-      <h3 class="text-light-sea-green text-sm">
-        Ciclo lectivo <span x-text="(new Date()).getFullYear();"></span>
-      </h3>
+    <div class="flex items-end gap-x-14">
+      <div class="flex flex-col gap-y-2 grow">
+        <h2 class="font-semibold text-lg">Listado de orden de presentación</h2>
+        <h3 class="text-light-sea-green text-sm">
+          Ciclo lectivo <span x-text="(new Date()).getFullYear();"></span>
+        </h3>
+      </div>
+      <div
+        class="flex items-center justify-center px-4 py-3 bg-ghost-white rounded-xl gap-x-6 w-1/4"
+      >
+        <img
+          class="w-4 h-4"
+          :src="$store.pageData.publicURL('icons/search.svg')"
+          alt=""
+        />
+        <input
+          class="font-poppins grow focus:outline-none"
+          type="text"
+          placeholder="Buscar"
+          x-model="filter.keyword"
+        />
+      </div>
     </div>
     <div class="grid grid-cols-6">
       <TableRow>
