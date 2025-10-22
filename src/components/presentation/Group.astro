@@ -1,0 +1,29 @@
+---
+import GroupCategory from "./GroupCategory.astro";
+---
+
+<template
+  x-if="$store.studentData.loading === false && $store.studentData.group.id !== 0"
+>
+  <div
+    class="flex px-12 py-10 items-center justify-between rounded-4xl bg-white"
+    x-data="{id: $store.studentData.group.id, state: undefined, date: undefined, block: undefined}"
+    x-effect="state = $store.presentationData.getGroupPresentationState(id); date = $store.presentationData.groupPresentationDates[id]?.date; block = $store.presentationData.groupPresentationDates[id]?.block"
+  >
+    <GroupCategory
+      img="/icons/people.svg"
+      category="Nombre del proyecto"
+      value="$store.studentData.group.name"
+    />
+    <GroupCategory
+      img="/icons/calendar.svg"
+      category="Fecha estimada de presentación"
+      value="date ? date.toLocaleDateString('es-ES', { month: 'short', weekday: 'long', day:'numeric' }) : '---'"
+    />
+    <GroupCategory
+      img="/icons/hashtag.svg"
+      category="Bloque estimado de presentación"
+      value="block !== undefined ? block : '---'"
+    />
+  </div></template
+>

@@ -1,5 +1,6 @@
 ---
 import Loader from "../../components/misc/loader/Loader.astro";
+import Group from "../../components/presentation/Group.astro";
 import Layout from "../../layouts/Layout.astro";
 ---
 
@@ -9,77 +10,71 @@ import Layout from "../../layouts/Layout.astro";
     Alpine.store("presentationData", presentationDataStore(Alpine));
   });
 </script>
-<Layout x>
-  <h1>Orden de Presentación</h1>
-  <div x-show="$store.studentData.loading === true" class="grow">
-    <Loader />
-  </div>
-  <template
-    x-if="$store.studentData.loading === false && $store.studentData.rotation === ''"
-  >
-    <div class="grow flex items-center justify-center gap-20 text-2xl">
-      <div
-        class="border p-4 cursor-pointer"
-        @click="$store.studentData.rotation = 'AB'"
-      >
-        AB
-      </div>
-      <div
-        class="border p-4 cursor-pointer"
-        @click="$store.studentData.rotation = 'CD'"
-      >
-        CD
-      </div>
+<Layout>
+  <main class="p-10 flex flex-col gap-y-6 min-h-full">
+    <h1 class="font-poppins text-2xl">
+      Hola<span
+        x-text="' ' + $store.studentData.name"
+        x-show="$store.studentData.name !== ''"></span>!
+    </h1>
+    <div x-show="$store.studentData.loading === true" class="grow">
+      <Loader />
     </div>
-  </template>
-  <template
-    x-if="$store.studentData.loading === false && $store.studentData.group.id !== 0"
-  >
-    <div
-      x-data="{id: $store.studentData.group.id, state: undefined, date: undefined, block: undefined}"
-      x-effect="state = $store.presentationData.getGroupPresentationState(id); date = $store.presentationData.groupPresentationDates[id]?.date; block = $store.presentationData.groupPresentationDates[id]?.block"
+    <template
+      x-if="$store.studentData.loading === false && $store.studentData.rotation === ''"
     >
-      <span x-text="$store.studentData.group.name"></span>
-      <span x-show="state !== undefined" x-text="state"></span>
-      <span
-        x-show="date !== undefined"
-        x-text="date ? date.toLocaleDateString('es-ES', { month: 'short', weekday: 'long', day:'numeric' }) : ''"
-      ></span>
-      <span x-show="block !== undefined" x-text="block"></span>
-    </div></template
-  >
-  <template
-    x-if="$store.studentData.loading === false && $store.studentData.rotation !== ''"
-  >
-    <table
-      x-data="{presentations: []}"
-      x-effect="await $store.presentationData.loadPresentationData($store.studentData.rotation);presentations = $store.presentationData.presentationOrder;"
+      <div class="grow flex items-center justify-center gap-20 text-2xl">
+        <div
+          class="border p-4 cursor-pointer"
+          @click="$store.studentData.rotation = 'AB'"
+        >
+          AB
+        </div>
+        <div
+          class="border p-4 cursor-pointer"
+          @click="$store.studentData.rotation = 'CD'"
+        >
+          CD
+        </div>
+      </div>
+    </template>
+    <Group />
+    <template
+      x-if="$store.studentData.loading === false && $store.studentData.rotation !== ''"
     >
-      <thead>
-        <tr>
-          <th>Grupo</th>
-          <th>Instancia</th>
-          <th>Estado</th>
-          <th>Fecha Estimada</th>
-          <th>Bloque Estimado</th>
-        </tr>
-      </thead>
-      <tbody x-show="presentations.length > 0">
-        <template x-for="presentation in presentations" :key="presentation.id">
+      <table
+        x-data="{presentations: []}"
+        x-effect="await $store.presentationData.loadPresentationData($store.studentData.rotation);presentations = $store.presentationData.presentationOrder;"
+      >
+        <thead>
           <tr>
-            <td x-text="presentation.name"></td>
-            <td x-text="presentation.instance"></td>
-            <td x-text="presentation.state"></td>
-            <td
-              x-data="{ date: $store.presentationData.groupPresentationDates[presentation.id]?.date }"
-              x-text="date ? date.toLocaleDateString('es-ES', { month: 'short', weekday: 'long', day:'numeric' }) : '---'"
-            ></td>
-            <td
-              x-text="$store.presentationData.groupPresentationDates[presentation.id] ? $store.presentationData.groupPresentationDates[presentation.id].block : '---'"
-            ></td>
+            <th>Grupo</th>
+            <th>Instancia</th>
+            <th>Estado</th>
+            <th>Fecha Estimada</th>
+            <th>Bloque Estimado</th>
           </tr>
-        </template>
-      </tbody>
-    </table>
-  </template>
+        </thead>
+        <tbody x-show="presentations.length > 0">
+          <template
+            x-for="presentation in presentations"
+            :key="presentation.id"
+          >
+            <tr>
+              <td x-text="presentation.name"></td>
+              <td x-text="presentation.instance"></td>
+              <td x-text="presentation.state"></td>
+              <td
+                x-data="{ date: $store.presentationData.groupPresentationDates[presentation.id]?.date }"
+                x-text="date ? date.toLocaleDateString('es-ES', { month: 'short', weekday: 'long', day:'numeric' }) : '---'"
+              ></td>
+              <td
+                x-text="$store.presentationData.groupPresentationDates[presentation.id] ? $store.presentationData.groupPresentationDates[presentation.id].block : '---'"
+              ></td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+    </template>
+  </main>
 </Layout>
