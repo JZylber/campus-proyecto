@@ -1,4 +1,5 @@
 ---
+import StateChip from "./StateChip.astro";
 import TableRow from "./TableRow.astro";
 ---
 
@@ -36,9 +37,7 @@ import TableRow from "./TableRow.astro";
     });
   });
 </script>
-<template
-  x-if="$store.presentationData && $store.presentationData.presentationOrder.length > 0"
->
+<template x-if="$store.presentationData.presentationOrder.length > 0">
   <div
     class="font-poppins flex flex-col px-12 py-8 rounded-4xl bg-white gap-y-5"
     x-data="presentations()"
@@ -70,10 +69,10 @@ import TableRow from "./TableRow.astro";
     <div class="grid grid-cols-6">
       <TableRow>
         <span class="text-gray">Nombre del grupo</span>
-        <span class="text-gray">Instancia</span>
         <span class="text-gray">Fecha estimada</span>
         <span class="text-gray">Bloque estimado</span>
         <span class="text-gray">Rotación</span>
+        <span class="text-gray">Instancia</span>
         <span class="text-gray">Estado del grupo</span>
       </TableRow>
       <template
@@ -81,16 +80,20 @@ import TableRow from "./TableRow.astro";
         :key="presentation.id"
       >
         <TableRow>
-          <span x-text="presentation.name"></span>
-          <span x-text="presentation.instance"></span>
+          <span class="text-[#292D32]" x-text="presentation.name"></span>
           <span
+            class="text-[#292D32]"
             x-text="$store.presentationData.groupPresentationDates[presentation.id]?.date ? $store.presentationData.showDate($store.presentationData.groupPresentationDates[presentation.id].date) : '---'"
           ></span>
           <span
-            x-text="$store.presentationData.groupPresentationDates[presentation.id] ? $store.presentationData.groupPresentationDates[presentation.id].block + '\xB0 bloque' : '---'"
+            class="text-[#292D32]"
+            x-text="$store.presentationData.groupPresentationDates[presentation.id] ? $store.presentationData.groupPresentationDates[presentation.id].block + '° bloque' : '---'"
           ></span>
-          <span x-text="presentation.rotation"></span>
-          <span x-text="presentation.state"></span>
+          <span class="text-[#292D32]" x-text="presentation.rotation"></span>
+          <span
+            class="text-[#292D32]"
+            x-text="presentation.instance + '° ronda'"></span>
+          <StateChip type="presentation.state" />
         </TableRow>
       </template>
     </div>
