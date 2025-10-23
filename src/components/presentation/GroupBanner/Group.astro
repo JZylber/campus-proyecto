@@ -6,24 +6,33 @@ import GroupCategory from "./GroupCategory.astro";
   x-if="$store.presentationData && $store.studentData.loading === false && $store.studentData.group.id !== 0"
 >
   <div
-    class="flex px-12 py-10 items-center justify-between rounded-4xl bg-white"
+    class="flex px-12 py-10 items-center justify-between rounded-4xl bg-white divide-x divide-[#F0F0F0]"
     x-data="{id: $store.studentData.group.id, state: undefined, date: undefined, block: undefined}"
     x-effect="state = $store.presentationData.getGroupPresentationState(id); date = $store.presentationData.groupPresentationDates[id]?.date; block = $store.presentationData.groupPresentationDates[id]?.block"
   >
     <GroupCategory
       img="/icons/people.svg"
+      bgImg="bg-[#F6E7ED]"
       category="Nombre del proyecto"
       value="$store.studentData.group.name"
     />
     <GroupCategory
       img="/icons/calendar.svg"
+      bgImg="bg-[#DDF4FF]"
       category="Fecha estimada de presentación"
       value="date ? $store.presentationData.showDate(date) : '---'"
     />
     <GroupCategory
       img="/icons/hashtag.svg"
+      bgImg="bg-[#FFEDE6]"
       category="Bloque estimado de presentación"
       value="block !== undefined ? block + '\xB0 bloque' : '---'"
+    />
+    <GroupCategory
+      img="/icons/cloud.svg"
+      bgImg="bg-[#F9F2FF]"
+      category="Estado del grupo"
+      value="state !== undefined ? state : '---'"
     />
   </div></template
 >
