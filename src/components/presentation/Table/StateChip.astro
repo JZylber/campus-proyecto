@@ -1,0 +1,10 @@
+---
+const { type } = Astro.props;
+---
+
+<div
+  class="flex px-4 py-0.5 border rounded-xl justify-center items-center w-fit h-fit"
+  :class=`{'bg-[#ecfdf5] border-[#34d399] text-[#059669]': ${type} === 'Aprobado','bg-[#FEF2F2] border-[#F87171] text-[#DC2626]': ${type} === 'No Presentan','bg-[#F3F4F6] border-[#9CA3AF] text-[#374151]': ${type} === 'Pendiente' }`
+>
+  <span x-text={type}></span>
+</div>

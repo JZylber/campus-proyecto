@@ -7,11 +7,30 @@ import Layout from "../../layouts/Layout.astro";
 
 <Layout>
   <main class="p-10 flex flex-col gap-y-6 min-h-full">
-    <h1 class="font-poppins text-2xl">
-      Hola<span
-        x-text="' ' + $store.studentData.name"
-        x-show="$store.studentData.name !== ''"></span>!
-    </h1>
+    <div class="flex justify-between text-[#333333]">
+      <h1 class="font-poppins text-2xl">
+        Hola<span
+          x-text="' ' + $store.studentData.name"
+          x-show="$store.studentData.name !== ''"></span>!
+      </h1>
+      <div
+        class="flex items-center gap-x-3.5"
+        x-show="$store.studentData.group.name!== ''"
+      >
+        <span
+          class="text-2xl font-semibold"
+          x-text="$store.studentData.group.name"></span>
+        <div
+          class="flex justify-center items-center w-10 h-10 rounded-full bg-[#F6E7ED]"
+        >
+          <img
+            class="w-[18px] h-[18px]"
+            :src="$store.pageData.publicURL('/icons/people.svg')"
+            alt=""
+          />
+        </div>
+      </div>
+    </div>
     <div x-show="$store.studentData.loading === true" class="grow">
       <Loader />
     </div>
