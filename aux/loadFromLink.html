@@ -9,6 +9,11 @@
       return response.text();
     });
   };
+  // Get footer and set margin top to 0
+  let footer = document.querySelector("footer");
+  if (footer) {
+    footer.style.marginTop = "0";
+  }
   // Create a div tag with the id "leftoverinformation", display none and append all breadcrumbs and menu to it
   let leftoverDiv = document.createElement("div");
   leftoverDiv.style.display = "none";
