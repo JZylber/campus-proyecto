@@ -76,39 +76,47 @@ const presentationDataStore = (Alpine: Alpine) => ({
     const possibleRotations = new Set(
       this.presentationDates.map((dateEntry) => dateEntry.rotation)
     );
-    // For each rotation, calculate the presentation blocks
-    for (const rotation of possibleRotations) {
-      const relevantDates = this.presentationDates.filter(
-        (dateEntry) =>
-          (isAfter(dateEntry.date, now) ||
-            (isSameDate(dateEntry.date, now) &&
-              dateEntry.block >= currentBlock)) &&
-          dateEntry.rotation === rotation
-      );
-      // Get groups that are pending or in progress
-      const relevantGroups = this.presentationOrder.filter(
-        (presentation) =>
-          (presentation.state === "Pendiente" ||
-            presentation.state === "Presentando") &&
-          presentation.rotation === rotation
-      );
-      let groupIndex = 0;
-      for (const dateEntry of relevantDates) {
-        const block = {
-          dateEntry,
-          groups: relevantGroups
-            .slice(groupIndex, groupIndex + dateEntry.numberOfPresentations)
-            .map((group) => group.id),
-        };
-        blocks.push(block);
-        groupIndex += dateEntry.numberOfPresentations;
-        if (groupIndex >= relevantGroups.length) {
-          break;
+    // Get all unique instances as a set
+    const possibleInstances = new Set(
+      this.presentationDates.map((dateEntry) => dateEntry.instance)
+    );
+    // For each rotation and instance, calculate the presentation blocks
+    for (const instance of possibleInstances) {
+      for (const rotation of possibleRotations) {
+        const relevantDates = this.presentationDates.filter(
+          (dateEntry) =>
+            (isAfter(dateEntry.date, now) ||
+              (isSameDate(dateEntry.date, now) &&
+                dateEntry.block >= currentBlock)) &&
+            dateEntry.rotation === rotation &&
+            dateEntry.instance === instance
+        );
+        // Get groups that are pending or in progress
+        const relevantGroups = this.presentationOrder.filter(
+          (presentation) =>
+            (presentation.state === "Pendiente" ||
+              presentation.state === "Presentando") &&
+            presentation.rotation === rotation &&
+            presentation.instance === instance
+        );
+        let groupIndex = 0;
+        for (const dateEntry of relevantDates) {
+          const block = {
+            dateEntry,
+            groups: relevantGroups
+              .slice(groupIndex, groupIndex + dateEntry.numberOfPresentations)
+              .map((group) => group.id),
+          };
+          blocks.push(block);
+          groupIndex += dateEntry.numberOfPresentations;
+          if (groupIndex >= relevantGroups.length) {
+            break;
+          }
         }
-      }
-      for (const block of blocks) {
-        for (const groupId of block.groups) {
-          this.setGroupPresentationDate(groupId, block.dateEntry);
+        for (const block of blocks) {
+          for (const groupId of block.groups) {
+            this.setGroupPresentationDate(groupId, block.dateEntry);
+          }
         }
       }
     }
@@ -121,7 +129,16 @@ const presentationDataStore = (Alpine: Alpine) => ({
     this.calculatePresentationBlocks();
   },
   getGroupPresentationState(groupId: number) {
-    const presentation = this.presentationOrder.find((p) => p.id === groupId);
+    const presentationEntries = this.presentationOrder.filter(
+      (p) => p.id === groupId
+    );
+    // Get the presentation with the highest instance number
+    let presentation: PresentationEntry | undefined = undefined;
+    for (const entry of presentationEntries) {
+      if (!presentation || entry.instance > presentation.instance) {
+        presentation = entry;
+      }
+    }
     return presentation ? presentation.state : undefined;
   },
   showDate(date: Date) {

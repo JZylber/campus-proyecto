@@ -77,7 +77,7 @@ import TableRow from "./TableRow.astro";
       </TableRow>
       <template
         x-for="presentation in filteredPresentations"
-        :key="presentation.id"
+        :key="presentation.instance + '-' + presentation.id"
       >
         <TableRow>
           <span class="text-[#292D32]" x-text="presentation.name"></span>
