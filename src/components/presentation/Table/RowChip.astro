@@ -1,0 +1,60 @@
+---
+import StateChip from "./StateChip.astro";
+
+const { name, date, block, rotation, instance, state } = Astro.props;
+---
+
+<div class="flex flex-col p-6 gap-y-5 bg-white rounded-2xl">
+  <div class="flex items-center justify-between">
+    <div class="flex flex-col">
+      <span class="text-gray text-sm font-poppins">Nombre del proyecto</span>
+      <span
+        class="font-poppins font-semibold text-2xl text-[#292D32]"
+        x-text={name}></span>
+    </div>
+    <div
+      class="flex justify-center items-center bg-[#F6E7ED] h-12 w-12 rounded-full shrink-0"
+    >
+      <img
+        class="h-5 w-5"
+        :src="$store.pageData.publicURL('icons/people.svg')"
+        alt=""
+      />
+    </div>
+  </div>
+  <div class="flex justify-between flex-wrap gap-y-5 items-center">
+    <div class="flex flex-col">
+      <span class="text-gray text-sm font-poppins">Fecha estimada</span>
+      <div
+        class="font-poppins font-semibold text-lg text-[#292D32]"
+        x-text={date}
+      >
+      </div>
+    </div>
+    <div class="flex flex-col">
+      <span class="text-gray text-sm font-poppins">Bloque estimado</span>
+      <div
+        class="font-poppins font-semibold text-lg text-[#292D32]"
+        x-text={block}
+      >
+      </div>
+    </div>
+    <div class="flex flex-col">
+      <span class="text-gray text-sm font-poppins">Rotación</span>
+      <div
+        class="font-poppins font-semibold text-lg text-[#292D32]"
+        x-text={rotation}
+      >
+      </div>
+    </div>
+    <div class="flex flex-col">
+      <span class="text-gray text-sm font-poppins">Instancia</span>
+      <div
+        class="font-poppins font-semibold text-lg text-[#292D32]"
+        x-text={instance}
+      >
+      </div>
+    </div>
+    <StateChip type={state} />
+  </div>
+</div>
