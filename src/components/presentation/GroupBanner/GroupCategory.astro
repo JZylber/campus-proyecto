@@ -1,9 +1,9 @@
 ---
-const { img, bgImg, category, value } = Astro.props;
+const { img, bgImg, category, value, className } = Astro.props;
 ---
 
 <div
-  class="flex basis-0 grow gap-x-5 justify-center items-center [&:not(:last-child)]:pr-5 [&:not(:first-child)]:pl-5"
+  class=`flex basis-0 grow gap-x-5 sm:justify-center items-center [&:not(:last-child)]:pb-5 [&:not(:first-child)]:pt-5 sm:py-0 [&:not(:last-child)]:sm:pr-5 [&:not(:first-child)]:sm:pl-5 ${className ?? ""}`
 >
   <div
     class=`${bgImg} rounded-full h-16 w-16 shrink-0 flex justify-center items-center`
