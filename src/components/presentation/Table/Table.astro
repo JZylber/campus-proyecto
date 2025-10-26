@@ -39,11 +39,11 @@ import TableRow from "./TableRow.astro";
 </script>
 <template x-if="$store.presentationData.presentationOrder.length > 0">
   <div
-    class="font-poppins flex flex-col px-12 py-8 rounded-4xl bg-white gap-y-5"
+    class="font-poppins flex flex-col sm:px-12 py-8 rounded-4xl sm:bg-white gap-y-5"
     x-data="presentations()"
     x-effect="filter.rotation = $store.studentData.rotation"
   >
-    <div class="flex items-end gap-x-14">
+    <div class="flex flex-col sm:flex-row items-end gap-y-5 gap-x-14">
       <div class="flex flex-col gap-y-2 grow">
         <h2 class="font-semibold text-lg">Listado de orden de presentación</h2>
         <h3 class="text-light-sea-green text-sm">
@@ -51,7 +51,7 @@ import TableRow from "./TableRow.astro";
         </h3>
       </div>
       <div
-        class="flex items-center justify-center px-4 py-3 bg-ghost-white rounded-xl gap-x-6 w-1/4"
+        class="flex items-center justify-center px-4 py-3 bg-white sm:bg-ghost-white rounded-xl gap-x-6 w-full sm:w-1/4"
       >
         <img
           class="w-4 h-4"
