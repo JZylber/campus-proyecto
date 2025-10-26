@@ -13,6 +13,7 @@ import TableRow from "./TableRow.astro";
         filter: {
           rotation: "",
           keyword: "",
+          sortCriteria: null,
         },
         init() {
           this.presentations = (
@@ -30,6 +31,22 @@ import TableRow from "./TableRow.astro";
             result = result.filter((p) =>
               p.name.toLowerCase().includes(this.filter.keyword.toLowerCase())
             );
+          }
+          if (this.filter.sortCriteria) {
+            const { category, ascending } = this.filter.sortCriteria;
+            if (category === "date") {
+              result = result.sort((a, b) => {
+                const dateA =
+                  (Alpine.store("presentationData") as PresentationData)
+                    .groupPresentationDates[a.id]?.date || "";
+                const dateB =
+                  (Alpine.store("presentationData") as PresentationData)
+                    .groupPresentationDates[b.id]?.date || "";
+                if (dateA < dateB) return ascending ? -1 : 1;
+                if (dateA > dateB) return ascending ? 1 : -1;
+                return 0;
+              });
+            }
           }
           return result;
         },
