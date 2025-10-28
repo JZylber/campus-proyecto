@@ -3,8 +3,7 @@ const { onChange } = Astro.props;
 ---
 
 <div
-  class="relative flex items-center justify-center px-4 py-3 bg-ghost-white gap-x-6 w-1/4"
-  :class="{'rounded-xl': !open, 'rounded-t-xl': open}"
+  class="relative flex items-center justify-center px-4 py-3 bg-white sm:bg-ghost-white gap-x-6 w-full max-w-[300px] sm:max-w-full sm:w-1/4"
   x-data=`selectFilter(${onChange})`
   @click.outside="open = false"
   @keydown.escape="open = false"
@@ -21,7 +20,7 @@ const { onChange } = Astro.props;
     class="w-3 h-3"
   />
   <div
-    class="absolute w-full top-full bg-ghost-white rounded-b-xl overflow-hidden shadow-lg z-10"
+    class="absolute w-full top-full bg-white sm:bg-ghost-white rounded-b-xl overflow-hidden shadow-lg z-10"
     x-show="open"
     x-transition:enter="transition ease-out duration-100"
     x-transition:enter-start="opacity-0 scale-95"
