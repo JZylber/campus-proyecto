@@ -7,7 +7,7 @@ const { onChange } = Astro.props;
   x-data=`selectFilter(${onChange})`
   @click.outside="open = false"
   @keydown.escape="open = false"
-  @click="open = !open"
+  @click.stop="open = !open"
 >
   <span class="font-poppins text-xs text-[#7E7E7E]"
     >Ordenar por: <span
