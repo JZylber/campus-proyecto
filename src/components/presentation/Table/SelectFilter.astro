@@ -1,0 +1,45 @@
+---
+const { onChange } = Astro.props;
+---
+
+<div
+  class="relative flex items-center justify-center px-4 py-3 bg-ghost-white gap-x-6 w-1/4"
+  :class="{'rounded-xl': !open, 'rounded-t-xl': open}"
+  x-data=`selectFilter(${onChange})`
+  @click.outside="open = false"
+  @keydown.escape="open = false"
+  @click="open = !open"
+>
+  <span class="font-poppins text-xs text-[#7E7E7E]"
+    >Ordenar por: <span
+      class="font-bold text-[#292D32]"
+      x-text="selected ? selected.label : ' '"></span></span
+  >
+  <img
+    :src="$store.pageData.publicURL('/icons/chevron-down.svg')"
+    alt="Arrow Down"
+    class="w-3 h-3"
+  />
+  <div
+    class="absolute w-full top-full bg-ghost-white rounded-b-xl overflow-hidden shadow-lg z-10"
+    x-show="open"
+    x-transition:enter="transition ease-out duration-100"
+    x-transition:enter-start="opacity-0 scale-95"
+    x-transition:enter-end="opacity-100 scale-100"
+    x-transition:leave="transition ease-in duration-75"
+    x-transition:leave-start="opacity-100 scale-100"
+    x-transition:leave-end="opacity-0 scale-95"
+    x-cloak
+  >
+    <template x-for="option in options" :key="option.label">
+      <div
+        class="px-4 py-3 cursor-pointer flex justify-center hover:bg-[#e8ebf2]"
+        :class="{'bg-light-gray': selected && selected.label === option.label}"
+        @click.stop="selected = option;open = false;"
+      >
+        <span class="text-xs font-bold text-[#292D32]" x-text="option.label"
+        ></span>
+      </div>
+    </template>
+  </div>
+</div>

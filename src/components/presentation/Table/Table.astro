@@ -1,4 +1,5 @@
 ---
+import SelectFilter from "./SelectFilter.astro";
 import StateChip from "./StateChip.astro";
 import TableRow from "./TableRow.astro";
 ---
@@ -53,6 +54,37 @@ import TableRow from "./TableRow.astro";
       };
     });
   });
+  interface FilterOption {
+    label: string;
+    value: { category: string; ascending: boolean };
+  }
+  document.addEventListener("alpine:init", () => {
+    Alpine.data(
+      "selectFilter",
+      (onChange: (value: FilterOption["value"] | null) => void) => {
+        return {
+          open: false,
+          options: [
+            {
+              label: "Más Próximo",
+              value: { category: "date", ascending: true },
+            },
+            {
+              label: "Más Lejano",
+              value: { category: "date", ascending: false },
+            },
+          ],
+          selected: null as FilterOption | null,
+          init() {
+            this.selected = this.options[0];
+            this.$watch("selected", (option) => {
+              onChange(option?.value || null);
+            });
+          },
+        };
+      }
+    );
+  });
 </script>
 <template x-if="$store.presentationData.presentationOrder.length > 0">
   <div
@@ -76,12 +108,13 @@ import TableRow from "./TableRow.astro";
           alt=""
         />
         <input
-          class="font-poppins grow focus:outline-none"
+          class="font-poppins grow focus:outline-non text-xs"
           type="text"
           placeholder="Buscar"
           x-model="filter.keyword"
         />
       </div>
+      <SelectFilter onChange="(value) => filter.sortCriteria = value" />
     </div>
     <div class="grid grid-cols-6">
       <TableRow>
