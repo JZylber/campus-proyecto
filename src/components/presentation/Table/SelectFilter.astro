@@ -7,7 +7,7 @@ const { onChange } = Astro.props;
   :class="{'rounded-xl': !open, 'rounded-t-xl': open }"
   x-data=`selectFilter(${onChange})`
   @click.outside="open = false"
-  @keydown.escape="open = false"
+  @keyup.escape.window="open = false"
   @click.stop="open = !open"
 >
   <span class="font-poppins text-xs text-[#7E7E7E]"
