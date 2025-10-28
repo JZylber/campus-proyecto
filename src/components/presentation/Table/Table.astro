@@ -1,5 +1,6 @@
 ---
 import RowChip from "./RowChip.astro";
+import SelectFilter from "./SelectFilter.astro";
 import StateChip from "./StateChip.astro";
 import TableRow from "./TableRow.astro";
 ---
@@ -14,6 +15,7 @@ import TableRow from "./TableRow.astro";
         filter: {
           rotation: "",
           keyword: "",
+          sortCriteria: null,
         },
         init() {
           this.presentations = (
@@ -32,10 +34,57 @@ import TableRow from "./TableRow.astro";
               p.name.toLowerCase().includes(this.filter.keyword.toLowerCase())
             );
           }
+          if (this.filter.sortCriteria) {
+            const { category, ascending } = this.filter.sortCriteria;
+            if (category === "date") {
+              result = result.sort((a, b) => {
+                const dateA =
+                  (Alpine.store("presentationData") as PresentationData)
+                    .groupPresentationDates[a.id]?.date || "";
+                const dateB =
+                  (Alpine.store("presentationData") as PresentationData)
+                    .groupPresentationDates[b.id]?.date || "";
+                if (dateA < dateB) return ascending ? -1 : 1;
+                if (dateA > dateB) return ascending ? 1 : -1;
+                return 0;
+              });
+            }
+          }
           return result;
         },
       };
     });
+  });
+  interface FilterOption {
+    label: string;
+    value: { category: string; ascending: boolean };
+  }
+  document.addEventListener("alpine:init", () => {
+    Alpine.data(
+      "selectFilter",
+      (onChange: (value: FilterOption["value"] | null) => void) => {
+        return {
+          open: false,
+          options: [
+            {
+              label: "Más Próximo",
+              value: { category: "date", ascending: true },
+            },
+            {
+              label: "Más Lejano",
+              value: { category: "date", ascending: false },
+            },
+          ],
+          selected: null as FilterOption | null,
+          init() {
+            this.selected = this.options[0];
+            this.$watch("selected", (option) => {
+              onChange(option?.value || null);
+            });
+          },
+        };
+      }
+    );
   });
 </script>
 <template x-if="$store.presentationData.presentationOrder.length > 0">
@@ -60,12 +109,13 @@ import TableRow from "./TableRow.astro";
           alt=""
         />
         <input
-          class="font-poppins grow focus:outline-none"
+          class="font-poppins grow focus:outline-non text-xs"
           type="text"
           placeholder="Buscar"
           x-model="filter.keyword"
         />
       </div>
+      <SelectFilter onChange="(value) => filter.sortCriteria = value" />
     </div>
     <div class="flex flex-col gap-y-9 sm:hidden">
       <template
