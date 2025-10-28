@@ -4,6 +4,7 @@ const { onChange } = Astro.props;
 
 <div
   class="relative flex items-center justify-center px-4 py-3 bg-white sm:bg-ghost-white gap-x-6 w-full max-w-[300px] sm:max-w-full sm:w-1/4"
+  :class="{'rounded-xl': !open, 'rounded-t-xl': open }"
   x-data=`selectFilter(${onChange})`
   @click.outside="open = false"
   @keydown.escape="open = false"
