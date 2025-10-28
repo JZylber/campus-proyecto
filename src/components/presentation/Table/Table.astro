@@ -38,12 +38,16 @@ import TableRow from "./TableRow.astro";
             const { category, ascending } = this.filter.sortCriteria;
             if (category === "date") {
               result = result.sort((a, b) => {
-                const dateA =
+                const dateA: Date | undefined =
                   (Alpine.store("presentationData") as PresentationData)
-                    .groupPresentationDates[a.id]?.date || "";
-                const dateB =
+                    .groupPresentationDates[a.id]?.date || undefined;
+                const dateB: Date | undefined =
                   (Alpine.store("presentationData") as PresentationData)
-                    .groupPresentationDates[b.id]?.date || "";
+                    .groupPresentationDates[b.id]?.date || undefined;
+                // Empty dates go at the end independent of ascending
+                if (!dateA && dateB) return 1;
+                if (dateA && !dateB) return -1;
+                if (!dateA && !dateB) return 0;
                 if (dateA < dateB) return ascending ? -1 : 1;
                 if (dateA > dateB) return ascending ? 1 : -1;
                 return 0;
@@ -78,6 +82,7 @@ import TableRow from "./TableRow.astro";
           selected: null as FilterOption | null,
           init() {
             this.selected = this.options[0];
+            onChange(this.selected.value);
             this.$watch("selected", (option) => {
               onChange(option?.value || null);
             });
