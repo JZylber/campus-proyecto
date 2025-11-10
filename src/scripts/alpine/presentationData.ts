@@ -48,15 +48,25 @@ const isAfter = (date1: Date, date2: Date) => {
 const presentationDataStore = (Alpine: Alpine) => ({
   presentationOrder: [] as Array<PresentationEntry>,
   presentationDates: [] as Array<PresentationDateEntry>,
-  groupPresentationDates: {} as Record<number, PresentationDateEntry>,
+  groupPresentationDates: {} as Record<
+    number,
+    Record<number, PresentationDateEntry>
+  >,
   setPresentationOrder(order: Array<PresentationEntry>) {
     this.presentationOrder = order;
   },
   setPresentationDates(dates: Array<PresentationDateEntry>) {
     this.presentationDates = dates;
   },
-  setGroupPresentationDate(groupId: number, date: PresentationDateEntry) {
-    this.groupPresentationDates[groupId] = date;
+  setGroupPresentationDate(
+    groupId: number,
+    instance: number,
+    date: PresentationDateEntry
+  ) {
+    if (!this.groupPresentationDates[groupId]) {
+      this.groupPresentationDates[groupId] = {};
+    }
+    this.groupPresentationDates[groupId][instance] = date;
   },
   async getPresentationOrder() {
     const { dataSheetId, onCampus } = Alpine.store("pageData") as PageData;
@@ -115,7 +125,11 @@ const presentationDataStore = (Alpine: Alpine) => ({
         }
         for (const block of blocks) {
           for (const groupId of block.groups) {
-            this.setGroupPresentationDate(groupId, block.dateEntry);
+            this.setGroupPresentationDate(
+              groupId,
+              block.dateEntry.instance,
+              block.dateEntry
+            );
           }
         }
       }
@@ -140,6 +154,11 @@ const presentationDataStore = (Alpine: Alpine) => ({
       }
     }
     return presentation ? presentation.state : undefined;
+  },
+  getGroupPresentationDate(groupId: number, instance: number) {
+    return this.groupPresentationDates[groupId]
+      ? this.groupPresentationDates[groupId][instance]
+      : undefined;
   },
   showDate(date: Date) {
     // Format date as Weekday (long) DD/MM

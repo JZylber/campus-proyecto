@@ -6,6 +6,7 @@ import TableRow from "./TableRow.astro";
 ---
 
 <script>
+  import { date } from "astro:schema";
   import type { PresentationData } from "../../../scripts/alpine/presentationData";
 
   document.addEventListener("alpine:init", () => {
@@ -39,26 +40,32 @@ import TableRow from "./TableRow.astro";
             if (category === "date") {
               result = result.sort((a, b) => {
                 const dateA: Date | undefined =
-                  (Alpine.store("presentationData") as PresentationData)
-                    .groupPresentationDates[a.id]?.date || undefined;
+                  (
+                    Alpine.store("presentationData") as PresentationData
+                  ).getGroupPresentationDate(a.id, a.instance)?.date ||
+                  undefined;
                 const dateB: Date | undefined =
-                  (Alpine.store("presentationData") as PresentationData)
-                    .groupPresentationDates[b.id]?.date || undefined;
+                  (
+                    Alpine.store("presentationData") as PresentationData
+                  ).getGroupPresentationDate(b.id, b.instance)?.date ||
+                  undefined;
                 // Empty dates go at the end independent of ascending
                 if (!dateA && dateB) return 1;
                 if (dateA && !dateB) return -1;
                 if (!dateA && !dateB) return 0;
-                if (dateA < dateB) return ascending ? -1 : 1;
-                if (dateA > dateB) return ascending ? 1 : -1;
+                if (dateA && dateB && dateA < dateB) return ascending ? -1 : 1;
+                if (dateA && dateB && dateA > dateB) return ascending ? 1 : -1;
                 // If dates are equal, sort by block
                 const blockA = (
                   Alpine.store("presentationData") as PresentationData
-                ).groupPresentationDates[a.id]?.block;
+                ).getGroupPresentationDate(a.id, a.instance)?.block;
                 const blockB = (
                   Alpine.store("presentationData") as PresentationData
-                ).groupPresentationDates[b.id]?.block;
-                if (blockA < blockB) return ascending ? -1 : 1;
-                if (blockA > blockB) return ascending ? 1 : -1;
+                ).getGroupPresentationDate(b.id, b.instance)?.block;
+                if (blockA && blockB && blockA < blockB)
+                  return ascending ? -1 : 1;
+                if (blockA && blockB && blockA > blockB)
+                  return ascending ? 1 : -1;
                 return 0;
               });
             }
@@ -138,8 +145,8 @@ import TableRow from "./TableRow.astro";
       >
         <RowChip
           name="presentation.name"
-          date="$store.presentationData.groupPresentationDates[presentation.id]?.date ? $store.presentationData.showDate($store.presentationData.groupPresentationDates[presentation.id].date) : '---'"
-          block="$store.presentationData.groupPresentationDates[presentation.id] ? $store.presentationData.groupPresentationDates[presentation.id].block + '° bloque' : '---'"
+          date="$store.presentationData.getGroupPresentationDate(presentation.id,presentation.instance)?.date ? $store.presentationData.showDate($store.presentationData.getGroupPresentationDate(presentation.id,presentation.instance).date) : '---'"
+          block="$store.presentationData.getGroupPresentationDate(presentation.id,presentation.instance) ? $store.presentationData.getGroupPresentationDate(presentation.id,presentation.instance).block + '° bloque' : '---'"
           rotation="presentation.rotation"
           instance="presentation.instance + '° ronda'"
           state="presentation.state"
@@ -163,11 +170,11 @@ import TableRow from "./TableRow.astro";
           <span class="text-[#292D32]" x-text="presentation.name"></span>
           <span
             class="text-[#292D32]"
-            x-text="$store.presentationData.groupPresentationDates[presentation.id]?.date ? $store.presentationData.showDate($store.presentationData.groupPresentationDates[presentation.id].date) : '---'"
+            x-text="$store.presentationData.getGroupPresentationDate(presentation.id,presentation.instance)?.date ? $store.presentationData.showDate($store.presentationData.getGroupPresentationDate(presentation.id,presentation.instance).date) : '---'"
           ></span>
           <span
             class="text-[#292D32]"
-            x-text="$store.presentationData.groupPresentationDates[presentation.id] ? $store.presentationData.groupPresentationDates[presentation.id].block + '° bloque' : '---'"
+            x-text="$store.presentationData.getGroupPresentationDate(presentation.id,presentation.instance) ? $store.presentationData.getGroupPresentationDate(presentation.id,presentation.instance).block + '° bloque' : '---'"
           ></span>
           <span class="text-[#292D32]" x-text="presentation.rotation"></span>
           <span
