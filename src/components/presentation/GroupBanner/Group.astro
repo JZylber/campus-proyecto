@@ -8,7 +8,7 @@ import GroupCategory from "./GroupCategory.astro";
   <div
     class="flex flex-col sm:flex-row p-9 sm:px-12 sm:py-10 items-start sm:items-center justify-between rounded-4xl bg-white divide-y sm:divide-y-0 sm:divide-x divide-[#F0F0F0]"
     x-data="{id: $store.studentData.group.id, state: undefined, date: undefined, block: undefined}"
-    x-effect="state = $store.presentationData.getGroupPresentationState(id); date = $store.presentationData.groupPresentationDates[id]?.date; block = $store.presentationData.groupPresentationDates[id]?.block"
+    x-effect="state = $store.presentationData.getGroupPresentationState(id); date = $store.presentationData.getGroupPresentationDate(id).date; block = $store.presentationData.getGroupPresentationDate(id).block"
   >
     <GroupCategory
       img="/icons/people.svg"

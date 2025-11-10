@@ -155,7 +155,16 @@ const presentationDataStore = (Alpine: Alpine) => ({
     }
     return presentation ? presentation.state : undefined;
   },
-  getGroupPresentationDate(groupId: number, instance: number) {
+  getGroupPresentationDate(groupId: number, instance?: number) {
+    // If instance is not provided, return the date for the highest instance
+    if (instance === undefined) {
+      const instances = this.groupPresentationDates[groupId];
+      if (!instances) {
+        return undefined;
+      }
+      const highestInstance = Math.max(...Object.keys(instances).map(Number));
+      return instances[highestInstance];
+    }
     return this.groupPresentationDates[groupId]
       ? this.groupPresentationDates[groupId][instance]
       : undefined;

@@ -2,9 +2,9 @@ import type { Alpine } from "alpinejs";
 import type { PageData } from "./pageData";
 import getStudentData from "../sheetsData/getStudentData";
 
-const DEBUG = true;
-const testName = "Bruno";
-const testSurname = "Ferro";
+const DEBUG = false;
+const testName = "Luna";
+const testSurname = "Ezernichi";
 
 const studentDataStore = (Alpine: Alpine) => ({
   name: "",
