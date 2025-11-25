@@ -25,6 +25,7 @@ export default async (name: string, surname: string, dataSheetId: string) => {
         name: student["Grupo"] as string,
       },
       role: student["Rol"] as string,
+      mark: parseInt(student["Nota"] as string),
     };
   } else {
     return null;
