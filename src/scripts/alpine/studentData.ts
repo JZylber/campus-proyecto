@@ -2,7 +2,7 @@ import type { Alpine } from "alpinejs";
 import type { PageData } from "./pageData";
 import getStudentData from "../sheetsData/getStudentData";
 
-const DEBUG = false;
+const DEBUG = true;
 const testName = "Luna";
 const testSurname = "Ezernichi";
 
@@ -18,6 +18,7 @@ const studentDataStore = (Alpine: Alpine) => ({
   role: "",
   rotation: "",
   loading: true,
+  mark: NaN,
   setRotation(course: string) {
     if (course.at(-1) === "A" || course.at(-1) === "B") {
       this.rotation = "AB";
@@ -32,6 +33,7 @@ const studentDataStore = (Alpine: Alpine) => ({
     id: number;
     group: { id: number; name: string };
     role: string;
+    mark: number;
   }) {
     this.name = studentData.name;
     this.surname = studentData.surname;
@@ -39,6 +41,7 @@ const studentDataStore = (Alpine: Alpine) => ({
     this.id = studentData.id;
     this.group = studentData.group;
     this.role = studentData.role;
+    this.mark = studentData.mark;
     this.setRotation(studentData.course);
   },
   async init() {
