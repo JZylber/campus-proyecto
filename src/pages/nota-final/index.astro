@@ -1,11 +1,18 @@
 ---
+import Loader from "../../components/misc/loader/Loader.astro";
 import Layout from "../../layouts/Layout.astro";
 ---
 
 <Layout>
-  <main class="p-9 sm:p-10 flex flex-col gap-y-8 min-h-1/2">
+  <div x-show="$store.studentData.loading === true" class="grow">
+    <Loader />
+  </div>
+  <main
+    class="p-9 sm:p-10 flex flex-col gap-y-8 min-h-1/2"
+    x-show="!$store.studentData.loading"
+  >
     <section
-      class="flex flex-col items-center justify-center rounded-4xl bg-white p-9 sm:p-10 gap-y-4 font-poppins"
+      class="flex flex-col items-center justify-center rounded-4xl bg-white p-9 sm:p-10 font-poppins"
       x-data="{text: '(Pendiente)'}"
       x-effect="
           let mark = $store.studentData.mark;
@@ -14,12 +21,22 @@ import Layout from "../../layouts/Layout.astro";
           }
         "
     >
-      <h1 class="text-2xl sm:text-3xl">Nota final</h1>
+      <template x-if="$store.studentData.name === ''">
+        <h1 class="text-2xl sm:text-3xl">
+          Logueate al campus para ver tu nota
+        </h1>
+      </template>
       <div
-        class="flex px-6 py-4 border-2 rounded-4xl justify-center items-center w-fit h-fit"
-        :class="{'bg-[#ecfdf5] border-[#34d399] text-[#059669]': text !== 'Desaprobado' && text !== '(Pendiente)','bg-[#FEF2F2] border-[#F87171] text-[#DC2626]': text === 'Desaprobado','bg-[#F3F4F6] border-[#9CA3AF] text-[#374151]': text === '(Pendiente)'}"
+        x-show="$store.studentData.name !== ''"
+        class="flex flex-col items-center justify-center gap-y-4"
       >
-        <span class="text-4xl sm:text-6xl" x-text="text"></span>
+        <h1 class="text-2xl sm:text-3xl">Nota final</h1>
+        <div
+          class="flex px-6 py-4 border-2 rounded-4xl justify-center items-center w-fit h-fit"
+          :class="{'bg-[#ecfdf5] border-[#34d399] text-[#059669]': text !== 'Desaprobado' && text !== '(Pendiente)','bg-[#FEF2F2] border-[#F87171] text-[#DC2626]': text === 'Desaprobado','bg-[#F3F4F6] border-[#9CA3AF] text-[#374151]': text === '(Pendiente)'}"
+        >
+          <span class="text-4xl sm:text-6xl" x-text="text"></span>
+        </div>
       </div>
     </section>
     <section class="flex flex-col gap-y-3">
@@ -40,5 +57,8 @@ import Layout from "../../layouts/Layout.astro";
         </li>
       </ul>
     </section>
+    <h2 class="text-center text-2xl font-bold">
+      Cualquier duda respecto a la nota hablar con el equipo docente
+    </h2>
   </main>
 </Layout>
