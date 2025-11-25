@@ -3,8 +3,8 @@ import type { PageData } from "./pageData";
 import getStudentData from "../sheetsData/getStudentData";
 
 const DEBUG = true;
-const testName = "Luna";
-const testSurname = "Ezernichi";
+const testName = "Julian";
+const testSurname = "Zylber";
 
 const studentDataStore = (Alpine: Alpine) => ({
   name: "",
